@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  webapp3:
+    image: ${DOCKER_REGISTRY-}webapp3
+    build:
+      context: .
+      dockerfile: webapp3/Dockerfile
+    ports:
+      - 443:443
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
