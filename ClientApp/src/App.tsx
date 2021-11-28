@@ -10,7 +10,7 @@ import './custom.css'
 export default () => {
     return (
         <Layout>
-            <Route exact path={["/", "/home", "index.html"]} component={Home} />
+            <Route exact path={["/", "/home", "/index.html"]} component={Home} />
             <Route exact path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
             <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
