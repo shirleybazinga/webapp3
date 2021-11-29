@@ -7,6 +7,12 @@ namespace webapp3.Helpers
 {
     public static class PasswordValidation
     {
+        private static readonly Lazy<string[]> words = new Lazy<string[]>(() =>
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "DICT.TXT");
+            return GetDictionaryWords(path);
+        });
+
         public static bool ValidatePassword(string input, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -40,7 +46,7 @@ namespace webapp3.Helpers
             }
             else if (!hasSymbols.IsMatch(input))
             {
-                errorMessage = "Password should contain at least one special case characters";
+                errorMessage = "Password should contain at least one special character";
                 return false;
             }
             else if (!hasMinimum8Chars.IsMatch(input))
@@ -50,7 +56,7 @@ namespace webapp3.Helpers
             }
             else if (hasRepetition.IsMatch(input))
             {
-                errorMessage = "Password should not contain repeatitons such as 'aa'";
+                errorMessage = "Password should not contain repetitions such as 'aa'";
                 return false;
             }
             else if (ContainsSequence(input))
@@ -73,7 +79,7 @@ namespace webapp3.Helpers
         {
             for (var i = 0; i < input.Length - 1; i++)
             {
-                if ((char.IsNumber(input[i]) || char.IsLetter(input[i])) && input[i] + 1 == input[i + 1])
+                if (char.IsLetterOrDigit(input[i]) && input[i] != '9' && input[i] != 'z' && input[i] != 'Z' && input[i] + 1 == input[i + 1])
                     return true;
             }
             return false;
@@ -81,9 +87,6 @@ namespace webapp3.Helpers
 
         private static bool ContainsDictWord(string input)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "DICT.TXT");
-            var words = new Lazy<string[]>(() => GetDictionaryWords(path));
-
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = i + 2; j < input.Length; j++)
@@ -108,10 +111,7 @@ namespace webapp3.Helpers
             {
                 // TODO: handle error, e.g. log
             }
-
             return lines.Where(it => it.Length >= 3).ToArray();
         }
-
-        
     }
 }

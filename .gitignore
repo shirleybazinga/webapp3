@@ -1,4 +1,4 @@
 bin
 obj
-webapp3/wwwroot/**
+webapp3/wwwroot
 .vs
