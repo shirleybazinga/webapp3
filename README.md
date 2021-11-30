@@ -8,12 +8,12 @@ Run the frontend:
 ```bash
 cd ClientApp
 yarn build
-robocopy build/ ../wwwroot /s
+cd ..
+robocopy ClientApp/build/ webapp3/wwwroot /s
 ```
 
 Run the backend:
 ```bash
-cd ..
 dotnet build webapp3.sln -c release
 dotnet dev-certs https
 dotnet dev-certs https --trust
