@@ -19,7 +19,7 @@ const Home = (props: LoginProps) => {
     const { token, setToken } = useToken();
 
     return (
-        !token ? <Redirect to="login" /> :
+        !token ? <Redirect to="/login" /> :
         <div>
             {/*<h1>Hello, world!</h1>*/}
             <FetchData />

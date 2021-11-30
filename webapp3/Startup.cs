@@ -91,7 +91,7 @@ namespace webapp3
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+            app.UseFileServer();
 
             app.UseRouting();
             app.UseCors(x => x

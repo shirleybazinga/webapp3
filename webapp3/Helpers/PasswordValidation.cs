@@ -21,7 +21,6 @@ namespace webapp3.Helpers
             var hasUpperChar = new Regex(@"[A-Z]+");
             var hasNumber = new Regex(@"[0-9]+");
             var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
-            var hasMinimum8Chars = new Regex(@".{8,}");
             var hasRepetition = new Regex(@"(\w)\1+");
 
             if (string.IsNullOrWhiteSpace(input))
@@ -49,7 +48,7 @@ namespace webapp3.Helpers
                 errorMessage = "Password should contain at least one special character";
                 return false;
             }
-            else if (!hasMinimum8Chars.IsMatch(input))
+            else if (input.Length < 8)
             {
                 errorMessage = "Password should not be less than 8 characters";
                 return false;
