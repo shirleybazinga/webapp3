@@ -26,14 +26,7 @@ export function handleSignup(firstname: string, lastname: string, username: stri
 }
 
 export function handleGetUsers(token: string, onSuccess: any, onFailure?: any) {
-    let testResult = common.test ? {
-        id: 1,
-        username: "shirley",
-        firstName: "Shirley",
-        lastName: "ZHANG"
-    } : null;
-
-    handleGet(common.USRPATH, token, onSuccess, onFailure, testResult);
+    handleGet(common.USRPATH, token, onSuccess, onFailure);
 }
 
 function handlePost(path: string, token: string | null, data: string, onSuccess: any, onFailure: any) {
@@ -59,7 +52,7 @@ function handlePost(path: string, token: string | null, data: string, onSuccess:
     });
 }
 
-function handleGet(path: string, token: string | null, onSuccess: any, onFailure?: any, testResult?: any) {
+function handleGet(path: string, token: string | null, onSuccess: any, onFailure?: any) {
     let header = { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : "" };
     let status = 0;
 
@@ -67,10 +60,6 @@ function handleGet(path: string, token: string | null, onSuccess: any, onFailure
         method: 'GET',
         headers: new Headers(header),
     }).then(res => {
-        if (testResult) {
-            return testResult;
-        }
-
         status = res.status;
         return res.json();
     }).then(jsonRes => {

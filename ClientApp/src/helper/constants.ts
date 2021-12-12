@@ -1,6 +1,4 @@
 ﻿export let common = {
-    test: false,
-    //test: true,
     DEFAULT: 'DEFAULT',
     TOKEN: 'token',
     USERDATA: 'userdata',
