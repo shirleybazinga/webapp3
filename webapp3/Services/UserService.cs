@@ -24,15 +24,9 @@ namespace webapp3.Services
     {
         private DataContext _context;
         private const int KEY_SIZE = 2048;
-        private Lazy<Chilkat.Rsa> rsa = new Lazy<Chilkat.Rsa>(() =>
+        static private Lazy<RSA> rsa = new Lazy<RSA>(() =>
         {
-            Chilkat.Rsa obj = new Chilkat.Rsa();
-            if (!obj.GenerateKey(KEY_SIZE))
-            {
-                throw new AppException("Cannot generate public key");
-            }
-            obj.LittleEndian = true;
-            return obj;
+            return RSA.Create(KEY_SIZE);
         });
 
         public UserService(DataContext context)
@@ -42,19 +36,23 @@ namespace webapp3.Services
 
         public string GetEncryptionKey()
         {
-            var publicKey = rsa.Value.ExportPublicKeyObj();
-            return publicKey.GetPem(false);
+            var publicKey = rsa.Value.ExportSubjectPublicKeyInfo();
+            var key = Convert.ToBase64String(publicKey);
+            return key;
         }
 
-        public User Authenticate(string username, string password)
+        static private string Decrypt(string cypher)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            return Encoding.UTF8.GetString(rsa.Value.Decrypt(Convert.FromBase64String(cypher), RSAEncryptionPadding.OaepSHA256));
+        }
+
+        public User Authenticate(string encryptedUsername, string encryptedPassword)
+        {
+            if (string.IsNullOrEmpty(encryptedUsername) || string.IsNullOrEmpty(encryptedPassword))
                 return null;
 
-            Console.WriteLine($"encrypted username = {username}, password = {password}");
-            //var decryptedUsername = Encoding.UTF8.GetString(rsa.Value.DecryptBytes(Convert.FromBase64String(username), true));
-            //var decryptedPassword = Encoding.UTF8.GetString(rsa.Value.DecryptBytes(Convert.FromBase64String(username), true));
-            //Console.WriteLine($"unencrypted username = {decryptedUsername}, password = {decryptedPassword}");
+            var username = Decrypt(encryptedUsername);
+            var password = Decrypt(encryptedPassword);
             var user = _context.Users.SingleOrDefault(x => x.Username == username);
 
             // check if username exists
@@ -79,8 +77,11 @@ namespace webapp3.Services
             return _context.Users.Find(id);
         }
 
-        public User Create(User user, string password)
+        public User Create(User user, string encryptePassword)
         {
+            user.Username = Decrypt(user.Username);
+            var password = Decrypt(encryptePassword);
+
             // validation
             if (!PasswordValidation.ValidatePassword(password, out string errMsg))
                 throw new PasswordException(errMsg);
