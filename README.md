@@ -14,12 +14,8 @@ robocopy ClientApp/build/ webapp3/wwwroot /s
 
 Run the backend:
 ```bash
-dotnet build webapp3.sln -c release
-dotnet dev-certs https
-dotnet dev-certs https --trust
-docker-compose -f docker-compose.yml -f docker-compose.override.yml --no-ansi build
-docker-compose -f docker-compose.yml -f docker-compose.override.yml --no-ansi up -d --no-build --force-recreate --remove-orphans
-docker exec -i -e ASPNETCORE_HTTPS_PORT="443" webapp3 sh -c ""dotnet" --additionalProbingPath /root/.nuget/packages --additionalProbingPath /root/.nuget/fallbackpackages "/app/webapp3.dll" | tee /dev/console"
+docker-compose -f docker-compose.yml --ansi never build
+docker-compose -f docker-compose.yml --ansi never up -d --no-build --force-recreate --remove-orphans
 ```
 
 Alternative way to run the backend (with Visual Studio):

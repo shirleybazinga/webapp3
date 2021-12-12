@@ -14,9 +14,13 @@ WORKDIR "/src/webapp3"
 RUN dotnet build "webapp3.csproj" -c Release -o /app/build
 
 FROM build AS publish
+RUN dotnet dev-certs https
 RUN dotnet publish "webapp3.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY --from=publish /root/.dotnet/corefx/cryptography/x509stores/my /root/.dotnet/corefx/cryptography/x509stores/my
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_HTTPS_PORT=443
+ENV ASPNETCORE_URLS="https://+:443"
 ENTRYPOINT ["dotnet", "webapp3.dll"]
