@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using System.IdentityModel.Tokens.Jwt;
 using webapp3.Helpers;
 using Microsoft.Extensions.Options;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using webapp3.Services;
 using webapp3.Entities;
@@ -38,44 +34,20 @@ namespace webapp3.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticateModel model)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            var user = _userService.Authenticate(model.Username, model.Password, _appSettings.Secret);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
             // return basic user info and authentication token
-            return Ok(new
-            {
-                user.Id,
-                user.Username,
-                user.FirstName,
-                user.LastName,
-                Token = tokenString
-            });
+            return Ok(user);
         }
 
         [AllowAnonymous]
         [HttpGet("encryptionKey")]
         public IActionResult EncryptionKey()
         {
-            return Ok(new
-            {
-                key = _userService.GetEncryptionKey()
-            });
+            return Ok(new { key = _userService.GetEncryptionKey() });
         }
 
         [AllowAnonymous]
@@ -89,9 +61,7 @@ namespace webapp3.Controllers
             {
                 // create user
                 _userService.Create(user, model.Password);
-                return Ok(new {
-                    message = "You have registered successfully. Please login."
-                });
+                return Ok(new { message = "You have registered successfully. Please login." });
             }
             catch (AppException ex)
             {

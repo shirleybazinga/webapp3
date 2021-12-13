@@ -7,6 +7,7 @@ This is a Web App with a login page and a functional page that can only access a
 Run the frontend:
 ```bash
 cd ClientApp
+yarn install
 yarn build
 cd ..
 robocopy ClientApp/build/ webapp3/wwwroot /s

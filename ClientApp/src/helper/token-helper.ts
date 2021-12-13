@@ -18,7 +18,6 @@ export default function useToken() {
 
     const [token, setToken] = useState(getToken());
 
-    // TODO: ts issue
     const saveToken = (userToken: UserToken | null) => {
         if (userToken) {
             sessionStorage.setItem(common.TOKEN, JSON.stringify(userToken));

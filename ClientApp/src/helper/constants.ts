@@ -7,7 +7,7 @@
     AUTHPATH: 'https://localhost/users/authenticate',
     REGPATH: 'https://localhost/users/register',
     USRPATH: 'https://localhost/users',
-    GETPUBKEY: 'https://localhost/users/EncryptionKey'
+    GETPUBKEY: 'https://localhost/users/encryptionKey'
 }
 
 export let login = {
