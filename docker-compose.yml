@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   webapp3:
+    container_name: webapp3
     image: ${DOCKER_REGISTRY-}webapp3
     build:
       context: .
