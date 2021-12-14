@@ -4,23 +4,23 @@ This is a Web App with a login page and a functional page that can only access a
 
 ## Usage
 
-Run the frontend:
+### Run the frontend:
 ```bash
 cd ClientApp
 yarn install
 yarn build
 cd ..
 ```
-Windows:
+#### Windows:
 ```
 robocopy ClientApp/build/ webapp3/wwwroot /s
 ```
-Linux:
+#### Linux:
 ```
 cp -r ClientApp/build/* webapp3/wwwroot
 ```
 
-Run the backend:
+### Run the backend:
 ```bash
 docker-compose -f docker-compose.yml build
 docker-compose -f docker-compose.yml up -d --no-build --force-recreate --remove-orphans
@@ -34,7 +34,7 @@ Alternative way to run the backend (with Visual Studio):
 3. Set Startup Projects to "docker-compose"
 4. Run "Start Without Debugging"
 
-Launch the application:
+### Launch the application:
 From browser, go to https://localhost
 
 ## Contributing
