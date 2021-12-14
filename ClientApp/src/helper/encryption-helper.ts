@@ -21,7 +21,7 @@ function ab2str(buf: ArrayBuffer) {
 
 function importRsaKey(pem: string) {
     // base64 decode the string to get the binary data
-    const binaryDerString = window.atob(pem);
+    const binaryDerString = atob(pem);
     // convert from a binary string to an ArrayBuffer
     const binaryDer = str2ab(binaryDerString);
 

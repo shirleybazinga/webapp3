@@ -10,14 +10,23 @@ cd ClientApp
 yarn install
 yarn build
 cd ..
+```
+Windows:
+```
 robocopy ClientApp/build/ webapp3/wwwroot /s
+```
+Linux:
+```
+cp -r ClientApp/build/* webapp3/wwwroot
 ```
 
 Run the backend:
 ```bash
-docker-compose -f docker-compose.yml --ansi never build
-docker-compose -f docker-compose.yml --ansi never up -d --no-build --force-recreate --remove-orphans
+docker-compose -f docker-compose.yml build
+docker-compose -f docker-compose.yml up -d --no-build --force-recreate --remove-orphans
 ```
+
+For Linux, you may need to run the above docker-compose commands as root or use "sudo"
 
 Alternative way to run the backend (with Visual Studio):
 1. Use Visual Studio to open solution file webapp3.sln

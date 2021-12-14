@@ -17,7 +17,6 @@ namespace webapp3.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
-
         string GetEncryptionKey();
         void Update(User user, string password = null);
         void Delete(int id);
@@ -84,10 +83,10 @@ namespace webapp3.Services
             return _context.Users.Find(id);
         }
 
-        public User Create(User user, string encryptePassword)
+        public User Create(User user, string encryptedPassword)
         {
             user.Username = Decrypt(user.Username);
-            var password = Decrypt(encryptePassword);
+            var password = Decrypt(encryptedPassword);
 
             // validation
             if (!PasswordValidation.ValidatePassword(password, out string errMsg))
